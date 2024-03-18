@@ -3,7 +3,7 @@ import { EVMBridgeLocker__factory, EvermoonBridgeToken__factory, Mintable__facto
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 
-describe.only("Bridge", async function () {
+describe("Bridge", async function () {
     async function deployAllContractsFixture() {
         // Contracts are deployed using the first signer/account by default
         const [owner, otherAccount] = await ethers.getSigners();
@@ -53,8 +53,7 @@ describe.only("Bridge", async function () {
 
         expect(await evermoonBridgeToken.connect(otherAccount).approve(bridgeLocker.address, ethers.utils.parseEther("0.4"))).not.to.be.reverted;
 
-        const verifyingSignature = owner.signMessage("For unlocking request: requestID");
-        expect(await bridgeLocker.connect(otherAccount).unlockToken(ethers.utils.parseEther("0.4"), verifyingSignature, "requestID")).not.to.be.reverted;
+        expect(await bridgeLocker.connect(otherAccount).unlockToken(ethers.utils.parseEther("0.4"))).not.to.be.reverted;
         expect(await evermoonBridgeToken.balanceOf(otherAccount.address)).to.equal(ethers.utils.parseEther("0.6"));
         expect(await evermoonBridgeToken.totalSupply()).to.equal(ethers.utils.parseEther("0.6"));
     });
@@ -68,8 +67,7 @@ describe.only("Bridge", async function () {
 
         expect(await evermoonBridgeToken.connect(otherAccount).approve(bridgeLocker.address, ethers.utils.parseEther("100"))).not.to.be.revertedWith("Insufficient balance");
 
-        const verifyingSignature = owner.signMessage("For unlocking request: requestID");
-        await expect(bridgeLocker.connect(otherAccount).unlockToken(ethers.utils.parseEther("100"), verifyingSignature, "requestID")).to.be.reverted;
+        await expect(bridgeLocker.connect(otherAccount).unlockToken(ethers.utils.parseEther("100"))).to.be.reverted;
         expect(await evermoonBridgeToken.balanceOf(otherAccount.address)).to.equal(ethers.utils.parseEther("1"));
         expect(await evermoonBridgeToken.totalSupply()).to.equal(ethers.utils.parseEther("1"));
     });

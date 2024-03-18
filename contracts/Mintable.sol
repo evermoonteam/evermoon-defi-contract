@@ -11,14 +11,17 @@ abstract contract Mintable is Ownable, IMintable {
 
     event AssetMinted(address to, uint256 id, bytes blueprint);
 
-    constructor(address _owner, address _imx) {
+    constructor(address _owner, address _imx) Ownable(_owner) {
         imx = _imx;
         require(_owner != address(0), "Owner must not be empty");
         transferOwnership(_owner);
     }
 
     modifier onlyOwnerOrIMX() {
-        require(msg.sender == imx || msg.sender == owner(), "Function can only be called by owner or IMX");
+        require(
+            msg.sender == imx || msg.sender == owner(),
+            "Function can only be called by owner or IMX"
+        );
         _;
     }
 

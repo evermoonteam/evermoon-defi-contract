@@ -11,7 +11,7 @@ contract Evermoon is ERC20Capped, AccessControl {
     constructor(
         address _minter
     ) ERC20("Evermoon", "EVM") ERC20Capped(1000000000 * 1e18) {
-        _setupRole(MINTER_ROLE, _minter);
+        _grantRole(MINTER_ROLE, _minter);
     }
 
     modifier checkRole(

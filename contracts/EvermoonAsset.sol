@@ -30,7 +30,7 @@ contract EvermoonAsset is ERC721, Mintable {
         uint256 _tokenId
     ) public view override returns (string memory) {
         require(
-            _exists(_tokenId),
+            _ownerOf(_tokenId) != address(0),
             "ERC721Metadata: URI query for nonexistent token"
         );
 
