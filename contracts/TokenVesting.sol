@@ -46,7 +46,7 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     mapping(address => uint256) private holdersVestingCount;
 
     /**
-     * @dev Reverts if the vesting schedule does not exist or has been revoked.
+     * @dev Reverts if the vesting has been revoked.
      */
     modifier onlyIfNotRevoked(bytes32 _scheduleId) {
         require(!vestingSchedules[_scheduleId].revoked);
