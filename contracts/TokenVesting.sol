@@ -156,6 +156,7 @@ contract TokenVesting is Ownable, ReentrancyGuard {
             vestingSchedule.revocable,
             "TokenVesting: vesting is not revocable"
         );
+        vestingSchedule.revoked = true;
         uint256 vestedAmount = _releasableAmount(vestingSchedule);
         if (vestedAmount > 0) {
             release(_scheduleId, vestedAmount);
@@ -163,7 +164,6 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         uint256 unreleased = vestingSchedule.totalAmount -
             vestingSchedule.releasedAmount;
         totalAmount = totalAmount - unreleased;
-        vestingSchedule.revoked = true;
 
         emit VestingRevoked(_scheduleId);
     }
