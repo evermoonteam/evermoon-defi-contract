@@ -6,7 +6,7 @@ import { expect } from "chai";
 import hre, { ethers } from "hardhat";
 import { TokenVesting as TokenVestingContract } from "../artifacts/typechain";
 import { MockToken } from "../artifacts/typechain";
-import { BigNumber } from "ethers";
+import { BigNumber, Wallet } from "ethers";
 
 describe("TokenVesting", function () {
   async function deployTokenAndVestingFixture() {
@@ -295,6 +295,18 @@ describe("TokenVesting", function () {
       // Check the released amount matches the total vested amount
       const vestingSchedule = await tokenVesting.getVestingSchedule(scheduleId);
       expect(vestingSchedule.releasedAmount).to.equal(TotalAmount);
+    });
+  });
+
+  describe.only("Transfering ownership", function () {
+    it("Should transfer ownership successfully", async function () {
+      const { tokenVesting, beneficiary, start, VestingDuration, TotalAmount } = await loadFixture(deployTokenAndVestingFixture);
+      const [owner] = await ethers.getSigners();
+      const newOwner = Wallet.createRandom();
+      await expect(tokenVesting.connect(owner).transferOwnership(newOwner.address))
+        .to.emit(tokenVesting, "OwnershipTransferred")
+        .withArgs(owner.address, newOwner.address);
+      expect(await tokenVesting.owner()).to.equal(newOwner.address);
     });
   });
 });
