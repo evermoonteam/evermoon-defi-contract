@@ -16,6 +16,8 @@ contract EVMBridgeLocker is AccessControl {
     constructor(address _owner, address _token) {
         _grantRole(OWNER_ROLE, _owner);
         _grantRole(DEFAULT_ADMIN_ROLE, _owner);
+        require(_owner != address(0), "_owner must not be zero address");
+        require(_token != address(0), "_token must not be zero address");
         token = EvermoonBridgeToken(_token);
     }
 
