@@ -40,7 +40,7 @@ contract EvermoonBridgeToken is ERC20Capped, AccessControl {
 
     function grantMinterRole(
         address _minter
-    ) external checkRole(OWNER_ROLE, msg.sender, "Caller is not a minter") {
+    ) external checkRole(OWNER_ROLE, msg.sender, "Caller is not an owner") {
         _grantRole(MINTER_ROLE, _minter);
     }
 }
